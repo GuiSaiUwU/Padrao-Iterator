@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Iterator;
 import java.util.List;
 
 public class IteradoresService {
@@ -22,23 +23,17 @@ public class IteradoresService {
     }
 
     public ObservableList<Piloto> carregarDados(OpcaoIterador opcao) {
-        Iterador iterador = switch (opcao) {
-            case DEQUE -> new DequeIterador();
-            case FILA -> new FilaIterador();
-            case MAP -> new MapIterador();
-            case PILHA -> new PilhaIterador();
-            case SET -> new SetIterador();
+        Iterator<Piloto> iterador = switch (opcao) {
+            case DEQUE -> new DequeIterador(linhas);
+            case FILA -> new FilaIterador(linhas);
+            case MAP -> new MapIterador(linhas);
+            case PILHA -> new PilhaIterador(linhas);
+            case SET -> new SetIterador(linhas);
         };
 
-        for (String linha : linhas) {
-            String[] dados = linha.split(",");
-            iterador.adicionarPiloto(new Piloto(Integer.parseInt(dados[0]), dados[1], dados[2], Integer.parseInt(dados[3]), dados[4], dados[5], Integer.parseInt(dados[6])));
-        }
-
         ObservableList<Piloto> resultado = FXCollections.observableArrayList();
-        while (iterador.temProximo()) {
-            resultado.add(iterador.itemAtual());
-            iterador.proximo();
+        while (iterador.hasNext()) {
+            resultado.add(iterador.next());
         }
 
         return resultado;

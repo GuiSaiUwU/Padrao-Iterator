@@ -2,41 +2,35 @@ package com.guisai.padraoiterator.iteradores;
 
 import com.guisai.padraoiterator.model.Piloto;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class FilaIterador implements Iterador {
+public class FilaIterador implements Iterator {
     Queue<Piloto> fila = new LinkedBlockingQueue<>();
-    Queue<Piloto> filaReserva = new LinkedBlockingQueue<>();
+    private Iterator<Piloto> it;
 
-    @Override
-    public void primeiro() {
-        while (!fila.isEmpty()) {
-            filaReserva.add(fila.remove());
-        }
+    public FilaIterador(List<String> linhas) {
+        linhas.forEach(l -> {
+            String[] dados = l.split(",");
+            adicionarPiloto(new Piloto(Integer.parseInt(dados[0]), dados[1], dados[2], Integer.parseInt(dados[3]), dados[4], dados[5], Integer.parseInt(dados[6])));
+        });
 
-        while (!filaReserva.isEmpty()) {
-            fila.add(filaReserva.remove());
-        }
+        it = fila.iterator();
     }
 
     @Override
-    public void proximo() {
-        filaReserva.add(fila.remove());
+    public Piloto next() {
+        return it.next();
     }
 
     @Override
-    public boolean temProximo() {
-        return !fila.isEmpty();
+    public boolean hasNext() {
+        return it.hasNext();
     }
 
-    @Override
-    public Piloto itemAtual() {
-        return fila.peek();
-    }
-
-    @Override
-    public void adicionarPiloto(Piloto piloto) {
+    private void adicionarPiloto(Piloto piloto) {
         fila.add(piloto);
     }
 }
