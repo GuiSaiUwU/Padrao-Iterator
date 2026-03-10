@@ -8,10 +8,13 @@ Este é um projeto educacional desenvolvido para estudar e praticar o **Padrão 
 
 O padrão Iterator fornece uma maneira de acessar elementos de uma coleção sequencialmente, sem expor a sua representação subjacente. Ele desacopla os algoritmos que operam sobre objetos das estruturas de dados que os contêm.
 
+Neste projeto, cada estrutura de dados implementa diretamente a interface **`java.util.Iterator<Piloto>`** do Java, utilizando os métodos padrão `hasNext()` e `next()` em vez de uma interface customizada.
+
 **Principais benefícios:**
 - ✅ Acesso uniforme a diferentes estruturas de dados
 - ✅ Encapsulamento da lógica de iteração
 - ✅ Código cliente simplificado e desacoplado
+- ✅ Compatibilidade nativa com a API padrão do Java
 
 ## 🏗️ Arquitetura do Projeto
 
@@ -29,8 +32,7 @@ O projeto implementa iteradores para cinco estruturas de dados diferentes:
 
 ```
 src/main/java/com/guisai/padraoiterator/
-├── iteradores/           # Implementações dos iteradores
-│   ├── Iterador.java     # Interface padrão
+├── iteradores/           # Implementações dos iteradores (java.util.Iterator)
 │   ├── DequeIterador.java
 │   ├── FilaIterador.java
 │   ├── MapIterador.java
@@ -87,19 +89,13 @@ $env:JAVA_HOME = 'C:\Caminho\Do\Java\...\jdk-21'
 ## 💡 Exemplo de Uso
 
 ```java
-// Criar um iterador específico
-Iterador iterador = new PilhaIterador();
+// Criar um iterador específico (implementa java.util.Iterator<Piloto>)
+Iterator<Piloto> iterador = new PilhaIterador(linhas);
 
-// Adicionar dados
-iterador.adicionarPiloto(piloto1);
-iterador.adicionarPiloto(piloto2);
-
-// Iterar sobre os dados
-iterador.primeiro();
-while (iterador.temProximo()) {
-    Piloto piloto = iterador.itemAtual();
+// Iterar sobre os dados usando a API padrão do Java
+while (iterador.hasNext()) {
+    Piloto piloto = iterador.next();
     System.out.println(piloto);
-    iterador.proximo();
 }
 ```
 
@@ -108,7 +104,7 @@ while (iterador.temProximo()) {
 Este projeto permite compreender:
 
 1. **Encapsulamento** - Como abstrair a iteração de diferentes estruturas
-2. **Interfaces** - Uso de contrato comum (`Iterador`)
+2. **Interfaces** - Uso do contrato padrão `java.util.Iterator<T>`
 3. **Polimorfismo** - Diferentes implementações do mesmo contrato
 4. **Design Patterns** - Aplicação prática do padrão Iterator
 5. **Processamento de Dados** - Leitura de CSV e manipulação de objetos
@@ -116,8 +112,8 @@ Este projeto permite compreender:
 ## 📝 Notas de Desenvolvimento
 
 - O arquivo CSV está localizado em `src/dados/DadosDosPilotosF1.csv`
-- Cada iterador implementa a interface `Iterador` com os métodos essenciais
-- O serviço `IteradoresService` gerencia o carregamento e conversão de dados
+- Cada iterador implementa `java.util.Iterator<Piloto>` com os métodos padrão `hasNext()` e `next()`
+- O serviço `IteradoresService` gerencia o carregamento, seleção do iterador e retorno dos dados para a UI
 - A interface gráfica permite selecionar qual estrutura de dados deseja usar
 
 ---

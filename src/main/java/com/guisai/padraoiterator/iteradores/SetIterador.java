@@ -4,33 +4,33 @@ import com.guisai.padraoiterator.model.Piloto;
 import javafx.util.Pair;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
-public class SetIterador implements Iterador {
-    HashSet<Pair<Integer, Piloto>> pilotos = new HashSet<>();
-    private Integer indice = 0;
+public class SetIterador implements Iterator {
+    HashSet<Piloto> pilotos = new HashSet<>();
+    private Iterator<Piloto> it;
 
-    @Override
-    public void primeiro() {
-        indice = 0;
+    public SetIterador(List<String> linhas) {
+        linhas.forEach(l -> {
+            String[] dados = l.split(",");
+            adicionarPiloto(new Piloto(Integer.parseInt(dados[0]), dados[1], dados[2], Integer.parseInt(dados[3]), dados[4], dados[5], Integer.parseInt(dados[6])));
+        });
+
+        it = pilotos.stream().iterator();
     }
 
     @Override
-    public void proximo() {
-        indice++;
+    public Piloto next() {
+        return it.next();
     }
 
     @Override
-    public boolean temProximo() {
-        return pilotos.size() > indice;
+    public boolean hasNext() {
+        return it.hasNext();
     }
 
-    @Override
-    public Piloto itemAtual() {
-        return pilotos.stream().filter(p -> p.getKey() == indice).findFirst().get().getValue();
-    }
-
-    @Override
-    public void adicionarPiloto(Piloto piloto) {
-        pilotos.add(new Pair<>(pilotos.size(), piloto));
+    private void adicionarPiloto(Piloto piloto) {
+        pilotos.add(piloto);
     }
 }
